@@ -1,8 +1,10 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import React from "react";
+import ReactDOM from "react-dom";
 import Home from '../App.js'
-import Businesses from '/components/Businesses.js'
-import Employees from '/components/Employees.js'
+import Businesses from './Businesses.js'
+import Employees from './Employees.js'
+import { Switch, Route } from 'react-router-dom'
+
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
