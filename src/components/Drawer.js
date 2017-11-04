@@ -58,7 +58,7 @@ function PermanentDrawer(props) {
         <AppBar className={classes.appBar}>
           <Toolbar>
             <Typography type="title" color="inherit" noWrap>
-              Permanent drawer
+              Spring Clock
             </Typography>
           </Toolbar>
         </AppBar>
@@ -69,15 +69,9 @@ function PermanentDrawer(props) {
           }}
         >
           <div className={classes.drawerHeader} />
-          <Divider />
           <Nav/>
-          <Divider />
-          
         </Drawer>
         <main className={classes.content}>
-          <Typography type="body1" noWrap>
-            {'You think water moves fast? You should see ice.'}
-          </Typography>
         </main>
       </div>
     </div>
