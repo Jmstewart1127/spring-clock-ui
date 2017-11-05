@@ -9,8 +9,8 @@ const Nav = () => (
     <nav>
       <ul>
         <li><Link to = "/home">Home</Link></li>
-        <li><Link to = "/employees">About</Link></li>
-        <li><Link to = "/businesses">Contact</Link></li>
+        <li><Link to = "/employees">Employees</Link></li>
+        <li><Link to = "/businesses">Businesses</Link></li>
       </ul>
     </nav>
   </header>

@@ -7,6 +7,7 @@ import Toolbar from 'material-ui/Toolbar';
 import List from 'material-ui/List';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
+import Main from './Main.js';
 import Nav from './Nav.js';
 
 const drawerWidth = 240;
@@ -72,6 +73,7 @@ function PermanentDrawer(props) {
           <Nav/>
         </Drawer>
         <main className={classes.content}>
+          <Main/>
         </main>
       </div>
     </div>
