@@ -1,9 +1,9 @@
 import React from "react";
-import Home from '../App.js'
-import Businesses from './Businesses.js'
-import Employees from './Employees.js'
-import TableExample from './TableExample.js'
-import { Switch, Route } from 'react-router-dom'
+import Businesses from './Businesses.js';
+import Employees from './Employees.js';
+import TableExample from './TableExample.js';
+import Home from './Home.js';
+import { Switch, Route } from 'react-router-dom';
 
 
 // The Main component renders one of the three provided
