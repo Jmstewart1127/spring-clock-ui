@@ -1,4 +1,21 @@
 import React from 'react';
+import ReactTable from 'react-table';
+
+const columns = [{
+  Header: 'Name',
+  accessor: 'user' // String-based value accessors!
+}, {
+  Header: 'Pay Rate',
+  accessor: 'payRate',
+  Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+}, {
+  id: 'totalPay', // Required because our accessor is not a string
+  Header: 'totalPay',
+  accessor: 'totalPay' // Custom value accessors!
+}, {
+  Header: props => <span>Clock Status</span>, // Custom header components!
+  accessor: 'clocked'
+}];
 
 const employeeData = [];
 
@@ -34,20 +51,6 @@ class Employees extends React.Component {
       });
   }
 
-  test() {
-    if (employeeData.length > 0) {
-      return (
-        <tr>
-          {this.state.employees.map(function (item, index) {
-            return <td>{item.user} {item.payRate} </td>
-          })}
-        </tr>
-      );
-    } else {
-      return <tr><td>hi</td></tr>
-    }
-  }
-
   componentDidMount() {
     this.getEmployees(2);
   }
@@ -63,9 +66,12 @@ class Employees extends React.Component {
               <th>Lastname</th>
               <th>Age</th>
             </tr>
-            {this.test()}
           </tbody>
         </table>
+        <ReactTable
+          data = {this.state.employees}
+          columns = {columns}
+        />
         <p></p>
       </div>
     );

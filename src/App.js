@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Drawer from './components/Drawer.js';
-
+import 'react-table/react-table.css'
 import './App.css';
 
 class App extends Component {
