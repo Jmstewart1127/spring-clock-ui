@@ -20,6 +20,9 @@ import IconButton from 'material-ui/IconButton';
 import Tooltip from 'material-ui/Tooltip';
 import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
+import Button from 'material-ui/Button';
+import Send from 'material-ui-icons/Send';
+import ClockButton from './ClockInOutButton.js';
 
 let counter = 0;
 function createData(name, calories, fat, carbs, protein) {
@@ -129,7 +132,7 @@ let EnhancedTableToolbar = props => {
         {numSelected > 0 ? (
           <Typography type="subheading">{numSelected} selected</Typography>
         ) : (
-            <Typography type="title">Nutrition</Typography>
+            <Typography type="title">Employees</Typography>
           )}
       </div>
       <div className={classes.spacer} />
@@ -169,6 +172,15 @@ const styles = theme => ({
   },
   tableWrapper: {
     overflowX: 'auto',
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
   },
 });
 
@@ -307,7 +319,8 @@ class EnhancedTable extends React.Component {
                     <TableCell numeric>{n.user}</TableCell>
                     <TableCell numeric>{n.payRate}</TableCell>
                     <TableCell numeric>{n.totalPay}</TableCell>
-                    <TableCell numeric>{n.clocked}</TableCell>
+                    <TableCell numeric>{n.clocked.toString()}</TableCell>
+                    <ClockButton/>
                   </TableRow>
                 );
               })}
