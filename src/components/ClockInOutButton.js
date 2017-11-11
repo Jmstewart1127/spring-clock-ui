@@ -24,9 +24,6 @@ const styles = theme => ({
 class ClockInAndOutButton extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      clocked: 'yo',
-    }
   }
   clockInAndOut(id) {
     fetch('https://spring-clock.herokuapp.com/rest/web/clock/in/' + id)
@@ -42,8 +39,10 @@ class ClockInAndOutButton extends React.Component {
     const { classes } = this.props;
     const { id } = this.props;
     var test = () => {
-      this.clockInAndOut(this.props.id);
-      console.log('a ' + this.props.id);
+      this.props.id["0"].forEach((element) => {
+        console.log(element);
+        this.clockInAndOut(element);
+      });
     }
     return (
       <div>

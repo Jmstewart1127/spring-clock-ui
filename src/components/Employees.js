@@ -261,17 +261,11 @@ class EnhancedTable extends React.Component {
             data: employeeData
           })
         }
-        console.log(this.state.employees);
       })
       .catch((error) => {
         console.error(error);
       });
   }
-
-  // reloadEmployees = () => {
-  //   this.getEmployees(2);
-  //   console.log('test');
-  // }
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -282,6 +276,11 @@ class EnhancedTable extends React.Component {
   };
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
+
+  setSelected = id => this.setState({selected: id});
+
+  test() {
+  }
 
   changeClockState = () => {
     this.setState({ clock: 'clock' });
@@ -311,6 +310,8 @@ class EnhancedTable extends React.Component {
             <TableBody>
               {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                 const isSelected = this.isSelected(n.id);
+                const selectedId = n.id;
+
                 return (
                   <TableRow
                     hover
@@ -330,15 +331,15 @@ class EnhancedTable extends React.Component {
                     <TableCell numeric>{n.payRate}</TableCell>
                     <TableCell numeric>{n.totalPay}</TableCell>
                     <TableCell numeric>{n.clocked.toString()}</TableCell>
-                    <ClockButton
-                      id = { n.id }
-                      clockStatus = { n.clocked }
-                    />
                   </TableRow>
                 );
               })}
             </TableBody>
             <TableFooter>
+              <ClockButton
+                id={[this.state.selected]}
+                onClick={this.test()}
+              />
               <TableRow>
                 <TablePagination
                   count={data.length}
