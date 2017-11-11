@@ -277,7 +277,7 @@ class EnhancedTable extends React.Component {
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
-  setSelected = id => this.setState({selected: id});
+  setSelected = id => this.setState({ selected: id });
 
   test() {
   }
