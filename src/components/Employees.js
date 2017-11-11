@@ -195,6 +195,7 @@ class EnhancedTable extends React.Component {
       data: [],
       page: 0,
       rowsPerPage: 5,
+      clock: '',
     };
   }
 
@@ -267,6 +268,11 @@ class EnhancedTable extends React.Component {
       });
   }
 
+  // reloadEmployees = () => {
+  //   this.getEmployees(2);
+  //   console.log('test');
+  // }
+
   handleChangePage = (event, page) => {
     this.setState({ page });
   };
@@ -276,6 +282,10 @@ class EnhancedTable extends React.Component {
   };
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
+
+  changeClockState = () => {
+    this.setState({ clock: 'clock' });
+  };
 
   componentDidMount() {
     this.getEmployees(2);
@@ -320,7 +330,10 @@ class EnhancedTable extends React.Component {
                     <TableCell numeric>{n.payRate}</TableCell>
                     <TableCell numeric>{n.totalPay}</TableCell>
                     <TableCell numeric>{n.clocked.toString()}</TableCell>
-                    <ClockButton/>
+                    <ClockButton
+                      id = { n.id }
+                      clockStatus = { n.clocked }
+                    />
                   </TableRow>
                 );
               })}

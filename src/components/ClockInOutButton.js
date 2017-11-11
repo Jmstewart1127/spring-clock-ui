@@ -21,20 +21,42 @@ const styles = theme => ({
   },
 });
 
-function IconLabelButtons(props) {
-  const { classes } = props;
-  return (
-    <div>
-      <Button className={classes.button} raised color="primary">
-        Clock In/Out
-          <Timer className={props.classes.rightIcon} />
-      </Button>
-    </div>
-  );
+class ClockInAndOutButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      clocked: 'yo',
+    }
+  }
+  clockInAndOut(id) {
+    fetch('https://spring-clock.herokuapp.com/rest/web/clock/in/' + id)
+      .then((responseJson) => {
+        return responseJson;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  render() {
+    const { classes } = this.props;
+    const { id } = this.props;
+    var test = () => {
+      this.clockInAndOut(this.props.id);
+      console.log('a ' + this.props.id);
+    }
+    return (
+      <div>
+        <Button
+          className={classes.button} raised color="primary"
+          onClick={test}
+        >
+          Clock In/Out
+          <Timer className={this.props.classes.rightIcon} />
+        </Button>
+      </div>
+    );
+  }
 }
 
-IconLabelButtons.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(IconLabelButtons);
+export default withStyles(styles)(ClockInAndOutButton);
