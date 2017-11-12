@@ -308,7 +308,8 @@ class EnhancedTable extends React.Component {
       console.log(element);
       this.clockInAndOut(element);
     });
-    this.refreshEmployees();
+    var intervalId = setTimeout(() => { this.getEmployees(2); }, 500);
+    intervalId;
   }
 
   handleChangePage = (event, page) => {
@@ -389,7 +390,7 @@ class EnhancedTable extends React.Component {
                   onClick={refreshEmployees}
                 >
                   Clock In/Out
-          <Timer className={this.props.classes.rightIcon} />
+                  <Timer className={this.props.classes.rightIcon} />
                 </Button>
               </div>
               <TableRow>
