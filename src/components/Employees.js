@@ -23,6 +23,7 @@ import FilterListIcon from 'material-ui-icons/FilterList';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
 import ClockButton from './ClockInOutButton.js';
+import Timer from 'material-ui-icons/Timer';
 
 let counter = 0;
 function createData(name, calories, fat, carbs, protein) {
@@ -182,6 +183,9 @@ const styles = theme => ({
   rightIcon: {
     marginLeft: theme.spacing.unit,
   },
+  button: {
+    margin: theme.spacing.unit,
+  },
 });
 
 class EnhancedTable extends React.Component {
@@ -195,7 +199,7 @@ class EnhancedTable extends React.Component {
       data: [],
       page: 0,
       rowsPerPage: 5,
-      clock: '',
+      clock: false,
     };
   }
 
@@ -250,7 +254,7 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: newSelected });
   };
 
-  getEmployees(id) {
+  getEmployees = id => {
     var employeeData = [];
     fetch('https://spring-clock.herokuapp.com/rest/employees/' + id)
       .then((response) => response.json())
@@ -261,10 +265,50 @@ class EnhancedTable extends React.Component {
             data: employeeData
           })
         }
+        console.log('a');
+        console.log(this.state.selected);
       })
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  refreshEmployees = () => {
+    var employeeData = [];
+    let id = 2;
+    fetch('https://spring-clock.herokuapp.com/rest/employees/' + id)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        for (let i = 0; i < responseJson.length; i++) {
+          employeeData.push(responseJson[i]);
+          this.setState({
+            data: employeeData
+          })
+        }
+        console.log('a');
+        console.log(this.state.selected);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  clockInAndOut = id => {
+    fetch('https://spring-clock.herokuapp.com/rest/web/clock/in/' + id)
+      .then((responseJson) => {
+        return responseJson;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  test = () => {
+    this.state.selected.forEach((element) => {
+      console.log(element);
+      this.clockInAndOut(element);
+    });
+    this.refreshEmployees();
   }
 
   handleChangePage = (event, page) => {
@@ -279,11 +323,14 @@ class EnhancedTable extends React.Component {
 
   setSelected = id => this.setState({ selected: id });
 
-  test() {
-  }
-
   changeClockState = () => {
-    this.setState({ clock: 'clock' });
+    if (!this.state.clock) {
+      this.setState({ clock: true });
+      console.log(this.state.clock);
+    } else {
+      this.setState({ clock: false });
+      console.log(this.state.clock);
+    }
   };
 
   componentDidMount() {
@@ -293,7 +340,9 @@ class EnhancedTable extends React.Component {
   render() {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-
+    var refreshEmployees = () => {
+      this.test();
+    }
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length} />
@@ -310,8 +359,6 @@ class EnhancedTable extends React.Component {
             <TableBody>
               {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                 const isSelected = this.isSelected(n.id);
-                const selectedId = n.id;
-
                 return (
                   <TableRow
                     hover
@@ -336,10 +383,15 @@ class EnhancedTable extends React.Component {
               })}
             </TableBody>
             <TableFooter>
-              <ClockButton
-                id={[this.state.selected]}
-                onClick={this.test()}
-              />
+              <div>
+                <Button
+                  className={classes.button} raised color="primary"
+                  onClick={refreshEmployees}
+                >
+                  Clock In/Out
+          <Timer className={this.props.classes.rightIcon} />
+                </Button>
+              </div>
               <TableRow>
                 <TablePagination
                   count={data.length}
