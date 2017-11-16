@@ -16,7 +16,7 @@ const styles = theme => ({
 });
 
 class ClockInAndOutButton extends React.Component {
-  clockInAndOut(id) {
+  clockInAndOut = id => {
     fetch('https://spring-clock.herokuapp.com/rest/web/clock/in/' + id)
       .then((responseJson) => {
         return responseJson;

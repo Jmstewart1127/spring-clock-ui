@@ -56,11 +56,25 @@ class Login extends React.Component {
       username: '',
       password: '',
       weight: '',
+      userId: '',
       showPassword: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  getUserId = (username, password) => {
+    fetch('https://spring-clock.herokuapp.com/rest/login/' + username + '/' + password)
+      .then((responseJson) => {
+        this.setState({
+          userId: responseJson,
+        });
+        console.log(this.state.userId);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   handleMouseDownPassword = event => {
@@ -78,6 +92,7 @@ class Login extends React.Component {
   handleSubmit(event) {
     alert('A name was submitted: ' + this.state.username + 
     ' password: ' + this.state.password);
+    this.getUserId(this.state.username, this.state.password);
     event.preventDefault();
   }
 
