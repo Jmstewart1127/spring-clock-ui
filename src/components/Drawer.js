@@ -67,7 +67,7 @@ function PermanentDrawer(props) {
             paper: classes.drawerPaper,
           }}
         >
-          <div className={classes.drawerHeader} />
+        <div className={classes.drawerHeader} />
           <Nav/>
         </Drawer>
         <main className={classes.content}>

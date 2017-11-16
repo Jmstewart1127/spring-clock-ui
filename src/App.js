@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Drawer from './components/Drawer.js';
+import Main from './components/Main.js';
 import 'react-table/react-table.css'
 import './App.css';
 

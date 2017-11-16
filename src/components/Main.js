@@ -2,6 +2,7 @@ import React from "react";
 import Businesses from './Businesses.js';
 import Employees from './Employees.js';
 import Home from './Home.js';
+import Login from './Login.js';
 import { Switch, Route } from 'react-router-dom';
 
 
@@ -16,6 +17,7 @@ const Main = () => (
       <Route exact path='/' component={Home}/>
       <Route path='/businesses' component={Businesses}/>
       <Route path='/employees' component={Employees}/>
+      <Route path='/login' component={Login}/>
     </Switch>
   </main>
 )
