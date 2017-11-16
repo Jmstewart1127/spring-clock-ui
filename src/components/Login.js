@@ -66,9 +66,10 @@ class Login extends React.Component {
 
   getUserId = (username, password) => {
     fetch('https://spring-clock.herokuapp.com/rest/login/' + username + '/' + password)
+      .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
-          userId: responseJson,
+          userId: responseJson.id,
         });
         console.log(this.state.userId);
       })
@@ -90,8 +91,8 @@ class Login extends React.Component {
   };
 
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.username + 
-    ' password: ' + this.state.password);
+    alert('A name was submitted: ' + this.state.username +
+      ' password: ' + this.state.password);
     this.getUserId(this.state.username, this.state.password);
     event.preventDefault();
   }
@@ -99,46 +100,46 @@ class Login extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-      <div className={styles.container}>
-        <FormControl className={styles.formControl}>
-          <InputLabel
-            FormControlClasses={{
-              focused: styles.inputLabelFocused,
-            }}
-            htmlFor="custom-color-input"
-          >
-            Username
+        <div className={styles.container}>
+          <FormControl className={styles.formControl}>
+            <InputLabel
+              FormControlClasses={{
+                focused: styles.inputLabelFocused,
+              }}
+              htmlFor="custom-color-input"
+            >
+              Username
           </InputLabel>
-          <Input
-            styles={{
-              inkbar: styles.inputInkbar,
-            }}
-            id="custom-color-input"
-            value={this.state.value}
-            onChange={this.handleChange('username')}
-          />
-        </FormControl>
-        <FormControl className={styles.formControl}>
-        <InputLabel htmlFor="password">Password</InputLabel>
-        <Input
-          id="password"
-          type={this.state.showPassword ? 'text' : 'password'}
-          value={this.state.password}
-          onChange={this.handleChange('password')}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                onClick={this.handleClickShowPasssword}
-                onMouseDown={this.handleMouseDownPassword}
-              >
-                {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-      </FormControl>
-          <input type="submit" value="Submit"/>
-      </div>
+            <Input
+              styles={{
+                inkbar: styles.inputInkbar,
+              }}
+              id="custom-color-input"
+              value={this.state.value}
+              onChange={this.handleChange('username')}
+            />
+          </FormControl>
+          <FormControl className={styles.formControl}>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input
+              id="password"
+              type={this.state.showPassword ? 'text' : 'password'}
+              value={this.state.password}
+              onChange={this.handleChange('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={this.handleClickShowPasssword}
+                    onMouseDown={this.handleMouseDownPassword}
+                  >
+                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+          <input type="submit" value="Submit" />
+        </div>
       </form>
     );
   }
