@@ -95,7 +95,7 @@ class Login extends React.Component {
       ' password: ' + this.state.password);
     this.getUserId(this.state.username, this.state.password);
     event.preventDefault();
-  }
+  };
 
   render() {
     return (
