@@ -32,8 +32,8 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const columnData = [
+  { id: 'Business', numeric: false, disablePadding: true, label: 'Business' },
   { id: 'ID', numeric: false, disablePadding: true, label: 'ID' },
-  { id: 'Business', numeric: true, disablePadding: false, label: 'Business' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -320,8 +320,8 @@ class EnhancedTable extends React.Component {
                     <TableCell padding="checkbox">
                       <Checkbox checked={isSelected} />
                     </TableCell>
+                    <TableCell padding="none">{n.bizName}</TableCell>
                     <TableCell padding="none">{n.id}</TableCell>
-                    <TableCell numeric>{n.bizName}</TableCell>
                   </TableRow>
                 );
               })}

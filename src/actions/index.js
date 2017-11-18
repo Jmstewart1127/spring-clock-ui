@@ -1,8 +1,10 @@
-export const login = text => {
+export const loginUser = text => {
   return {
     type: 'LOGIN',
-    id: '',
+    id: text,
     user: '',
     loggedIn: false
   }
 }
+
+export default loginUser

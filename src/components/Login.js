@@ -8,6 +8,9 @@ import Visibility from 'material-ui-icons/Visibility';
 import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 import purple from 'material-ui/colors/purple';
+import { createStore } from 'redux';
+import login from '../reducers/login';
+import loginUser from '../actions/index';
 
 const styles = theme => ({
   container: {
@@ -49,6 +52,8 @@ const styles = theme => ({
   },
 });
 
+const store = createStore(login);
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -78,6 +83,13 @@ class Login extends React.Component {
       });
   }
 
+  storeUserData = data => {
+    return {
+      type: 'LOGIN',
+      data
+    }
+  };
+
   handleMouseDownPassword = event => {
     event.preventDefault();
   };
@@ -91,10 +103,11 @@ class Login extends React.Component {
   };
 
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.username +
-      ' password: ' + this.state.password);
     this.getUserId(this.state.username, this.state.password);
     event.preventDefault();
+    loginUser(this.state.userId);
+    store.dispatch(this.storeUserData(this.state.userId));
+    console.log(store.getState());
   };
 
   render() {
