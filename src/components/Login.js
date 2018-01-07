@@ -105,9 +105,8 @@ class Login extends React.Component {
   handleSubmit(event) {
     this.getUserId(this.state.username, this.state.password);
     event.preventDefault();
-    loginUser(this.state.userId);
-    store.dispatch(this.storeUserData(this.state.userId));
-    console.log(store.getState());
+    var wait = setTimeout(() => { localStorage.setItem('id', this.state.userId); }, 500);
+    console.log("user id = " + localStorage.getItem('id'));
   };
 
   render() {

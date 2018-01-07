@@ -254,9 +254,10 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: newSelected });
   };
 
-  getEmployees = id => {
+  getEmployees = () => {
     var employeeData = [];
-    fetch('https://spring-clock.herokuapp.com/rest/employees/' + id)
+    let id = localStorage.getItem('id');
+    fetch('https://spring-clock.herokuapp.com/rest/get/all/employees/' + id)
       .then((response) => response.json())
       .then((responseJson) => {
         for (let i = 0; i < responseJson.length; i++) {
@@ -275,7 +276,7 @@ class EnhancedTable extends React.Component {
 
   refreshEmployees = () => {
     var employeeData = [];
-    let id = 2;
+    let id = localStorage.getItem('id');
     fetch('https://spring-clock.herokuapp.com/rest/employees/' + id)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -303,12 +304,12 @@ class EnhancedTable extends React.Component {
       });
   }
 
-  test = () => {
+  clockInAndOutFakeLatency = () => {
     this.state.selected.forEach((element) => {
       console.log(element);
       this.clockInAndOut(element);
     });
-    var intervalId = setTimeout(() => { this.getEmployees(2); }, 500);
+    var intervalId = setTimeout(() => { this.getEmployees(); }, 500);
     intervalId;
   }
 
@@ -335,14 +336,14 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount() {
-    this.getEmployees(2);
+    this.getEmployees();
   }
 
   render() {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-    var refreshEmployees = () => {
-      this.test();
+    var getEmployees = () => {
+      this.clockInAndOutFakeLatency();
     }
     return (
       <Paper className={classes.root}>
@@ -387,7 +388,7 @@ class EnhancedTable extends React.Component {
               <div>
                 <Button
                   className={classes.button} raised color="primary"
-                  onClick={refreshEmployees}
+                  onClick={getEmployees}
                 >
                   Clock In/Out
                   <Timer className={this.props.classes.rightIcon} />
