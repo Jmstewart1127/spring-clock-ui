@@ -10,6 +10,7 @@ import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 import purple from 'material-ui/colors/purple';
 import { createStore } from 'redux';
 import login from '../reducers/login';
+import Button from 'material-ui/Button';
 import loginUser from '../actions/index';
 
 const styles = theme => ({
@@ -62,6 +63,7 @@ class Login extends React.Component {
       password: '',
       weight: '',
       userId: '',
+      loggedIn: false,
       showPassword: false,
     };
 
@@ -76,19 +78,11 @@ class Login extends React.Component {
         this.setState({
           userId: responseJson.id,
         });
-        console.log(this.state.userId);
       })
       .catch((error) => {
         console.error(error);
       });
   }
-
-  storeUserData = data => {
-    return {
-      type: 'LOGIN',
-      data
-    }
-  };
 
   handleMouseDownPassword = event => {
     event.preventDefault();
@@ -105,55 +99,80 @@ class Login extends React.Component {
   handleSubmit(event) {
     this.getUserId(this.state.username, this.state.password);
     event.preventDefault();
-    var wait = setTimeout(() => { localStorage.setItem('id', this.state.userId); }, 500);
-    console.log("user id = " + localStorage.getItem('id'));
+    setTimeout(() => { localStorage.setItem('id', this.state.userId); }, 500);
+    this.setState({
+      loggedIn: true,
+    })
   };
 
+  handleLogOut = () => {
+    localStorage.setItem('id', 'undefined');
+    this.setState({
+      loggedIn: false,
+    });
+  };
+
+  componentWillMount() {
+    console.log(localStorage.getItem('id'));
+  }
+
   render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <div className={styles.container}>
-          <FormControl className={styles.formControl}>
-            <InputLabel
-              FormControlClasses={{
-                focused: styles.inputLabelFocused,
-              }}
-              htmlFor="custom-color-input"
-            >
-              Username
-          </InputLabel>
-            <Input
-              styles={{
-                inkbar: styles.inputInkbar,
-              }}
-              id="custom-color-input"
-              value={this.state.value}
-              onChange={this.handleChange('username')}
-            />
-          </FormControl>
-          <FormControl className={styles.formControl}>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              id="password"
-              type={this.state.showPassword ? 'text' : 'password'}
-              value={this.state.password}
-              onChange={this.handleChange('password')}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={this.handleClickShowPasssword}
-                    onMouseDown={this.handleMouseDownPassword}
-                  >
-                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-          <input type="submit" value="Submit" />
+    if (localStorage.getItem('id') === 'undefined') {
+      return (
+        <form onSubmit={this.handleSubmit}>
+          <div className={styles.container}>
+            <FormControl className={styles.formControl}>
+              <InputLabel
+                FormControlClasses={{
+                  focused: styles.inputLabelFocused,
+                }}
+                htmlFor="custom-color-input"
+              >
+                Username
+              </InputLabel>
+              <Input
+                styles={{
+                  inkbar: styles.inputInkbar,
+                }}
+                id="custom-color-input"
+                value={this.state.value}
+                onChange={this.handleChange('username')}
+              />
+            </FormControl>
+            <FormControl className={styles.formControl}>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input
+                id="password"
+                type={this.state.showPassword ? 'text' : 'password'}
+                value={this.state.password}
+                onChange={this.handleChange('password')}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={this.handleClickShowPasssword}
+                      onMouseDown={this.handleMouseDownPassword}
+                    >
+                      {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <input type="submit" value="Submit" />
+          </div>
+        </form>
+      );
+    } else {
+      return (
+        <div>
+          <Button
+            onClick={this.handleLogOut}
+          >
+            Logout
+          </Button>
         </div>
-      </form>
-    );
+      );
+    }
   }
 }
 

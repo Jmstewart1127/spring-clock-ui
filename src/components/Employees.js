@@ -22,7 +22,6 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
-import ClockButton from './ClockInOutButton.js';
 import Timer from 'material-ui-icons/Timer';
 
 let counter = 0;
@@ -266,13 +265,28 @@ class EnhancedTable extends React.Component {
             data: employeeData
           })
         }
-        console.log('a');
-        console.log(this.state.selected);
       })
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
+
+  getEmployeesByBusinessId = businessId => {
+    var employeeData = [];
+    fetch('https://spring-clock.herokuapp.com/rest/employees/' + businessId)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        for (let i = 0; i < responseJson.length; i++) {
+          employeeData.push(responseJson[i]);
+          this.setState({
+            data: employeeData
+          })
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   refreshEmployees = () => {
     var employeeData = [];
@@ -292,7 +306,7 @@ class EnhancedTable extends React.Component {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   clockInAndOut = id => {
     fetch('https://spring-clock.herokuapp.com/rest/web/clock/in/' + id)
@@ -302,16 +316,15 @@ class EnhancedTable extends React.Component {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   clockInAndOutFakeLatency = () => {
     this.state.selected.forEach((element) => {
       console.log(element);
       this.clockInAndOut(element);
     });
-    var intervalId = setTimeout(() => { this.getEmployees(); }, 500);
-    intervalId;
-  }
+    setTimeout(() => { this.getEmployees(); }, 500);
+  };
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -340,11 +353,11 @@ class EnhancedTable extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, businessId } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-    var getEmployees = () => {
+    const getEmployees = () => {
       this.clockInAndOutFakeLatency();
-    }
+    };
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length} />

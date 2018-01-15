@@ -12,6 +12,7 @@ import Table, {
   TableRow,
   TableSortLabel,
 } from 'material-ui/Table';
+import { Link } from 'react-router-dom';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Paper from 'material-ui/Paper';
@@ -22,7 +23,6 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
-import ClockButton from './ClockInOutButton.js';
 import Timer from 'material-ui-icons/Timer';
 
 let counter = 0;
@@ -130,7 +130,7 @@ let EnhancedTableToolbar = props => {
         {numSelected > 0 ? (
           <Typography type="subheading">{numSelected} selected</Typography>
         ) : (
-            <Typography type="title">Employees</Typography>
+            <Typography type="title">Businesses</Typography>
           )}
       </div>
       <div className={classes.spacer} />
@@ -196,7 +196,7 @@ class EnhancedTable extends React.Component {
       data: [],
       page: 0,
       rowsPerPage: 5,
-      clock: false,
+      redirect: false,
     };
   }
 
@@ -251,7 +251,8 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: newSelected });
   };
 
-  getBusinesses = id => {
+  getBusinesses = () => {
+    let id = localStorage.getItem('id');
     var businessData = [];
     fetch('https://spring-clock.herokuapp.com/rest/user/' + id + '/businesses')
       .then((response) => response.json())
@@ -268,7 +269,11 @@ class EnhancedTable extends React.Component {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
+
+  linkToEmployeesFromBusiness = () => {
+
+  };
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -283,7 +288,7 @@ class EnhancedTable extends React.Component {
   setSelected = id => this.setState({ selected: id });
 
   componentDidMount() {
-    this.getBusinesses(2);
+    this.getBusinesses();
   }
 
   render() {

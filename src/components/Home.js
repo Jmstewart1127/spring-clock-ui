@@ -1,11 +1,13 @@
 import React from 'react';
-import Drawer from './Drawer.js';
+import Login from './Login';
 
 class Home extends React.Component {
   render() {
-      return (
-        <div>Hi</div>
-      );
+    return (
+      <div className="App">
+        <Login/>
+      </div>
+    );
   }
 }
 
