@@ -4,6 +4,7 @@ import Employees from './Employees.js';
 import Home from './Home.js';
 import Login from './Login.js';
 import { Switch, Route } from 'react-router-dom';
+import EmployeesByBusiness from "./EmployeesByBusiness";
 
 
 // The Main component renders one of the three provided
@@ -19,6 +20,7 @@ const Main = () => (
       <Route path='/employees' component={Employees}/>
       <Route path='/login' component={Login}/>
     </Switch>
+    <Route path='/employees/:id' component={EmployeesByBusiness}/>
   </main>
 )
 

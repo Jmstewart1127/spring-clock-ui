@@ -12,7 +12,6 @@ import Table, {
   TableRow,
   TableSortLabel,
 } from 'material-ui/Table';
-import { Link } from 'react-router-dom';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Paper from 'material-ui/Paper';
@@ -24,7 +23,6 @@ import FilterListIcon from 'material-ui-icons/FilterList';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
 import Timer from 'material-ui-icons/Timer';
-import EmployeesByBusiness from "./EmployeesByBusiness";
 
 let counter = 0;
 function createData(name, calories, fat, carbs, protein) {
@@ -33,8 +31,11 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const columnData = [
-  { id: 'Business', numeric: false, disablePadding: true, label: 'Business' },
   { id: 'ID', numeric: false, disablePadding: true, label: 'ID' },
+  { id: 'User', numeric: true, disablePadding: false, label: 'User' },
+  { id: 'Rate', numeric: true, disablePadding: false, label: 'Rate' },
+  { id: 'Net Pay', numeric: true, disablePadding: false, label: 'Net Pay' },
+  { id: 'Clock Status', numeric: true, disablePadding: false, label: 'Clock Status' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -98,15 +99,15 @@ const toolbarStyles = theme => ({
     paddingRight: 2,
   },
   highlight:
-  theme.palette.type === 'light'
-    ? {
-      color: theme.palette.secondary.A700,
-      backgroundColor: theme.palette.secondary.A100,
-    }
-    : {
-      color: theme.palette.secondary.A100,
-      backgroundColor: theme.palette.secondary.A700,
-    },
+    theme.palette.type === 'light'
+      ? {
+        color: theme.palette.secondary.A700,
+        backgroundColor: theme.palette.secondary.A100,
+      }
+      : {
+        color: theme.palette.secondary.A100,
+        backgroundColor: theme.palette.secondary.A700,
+      },
   spacer: {
     flex: '1 1 100%',
   },
@@ -131,8 +132,8 @@ let EnhancedTableToolbar = props => {
         {numSelected > 0 ? (
           <Typography type="subheading">{numSelected} selected</Typography>
         ) : (
-            <Typography type="title">Businesses</Typography>
-          )}
+          <Typography type="title">Employees</Typography>
+        )}
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
@@ -143,12 +144,12 @@ let EnhancedTableToolbar = props => {
             </IconButton>
           </Tooltip>
         ) : (
-            <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list">
-                <FilterListIcon />
-              </IconButton>
-            </Tooltip>
-          )}
+          <Tooltip title="Filter list">
+            <IconButton aria-label="Filter list">
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </div>
     </Toolbar>
   );
@@ -192,12 +193,12 @@ class EnhancedTable extends React.Component {
 
     this.state = {
       order: 'asc',
-      orderBy: 'calories',
+      orderBy: '',
       selected: [],
       data: [],
       page: 0,
       rowsPerPage: 5,
-      redirect: false,
+      clock: false,
     };
   }
 
@@ -208,7 +209,6 @@ class EnhancedTable extends React.Component {
     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc';
     }
-
     const data =
       order === 'desc'
         ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
@@ -252,16 +252,51 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: newSelected });
   };
 
-  getBusinesses = () => {
+  getEmployees = () => {
+    const employeeData = [];
     let id = localStorage.getItem('id');
-    var businessData = [];
-    fetch('https://spring-clock.herokuapp.com/rest/user/' + id + '/businesses')
+    fetch('https://spring-clock.herokuapp.com/rest/get/all/employees/' + id)
       .then((response) => response.json())
       .then((responseJson) => {
         for (let i = 0; i < responseJson.length; i++) {
-          businessData.push(responseJson[i]);
+          employeeData.push(responseJson[i]);
           this.setState({
-            data: businessData
+            data: employeeData
+          })
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  getEmployeesByBusinessId = businessId => {
+    const employeeData = [];
+    fetch('https://spring-clock.herokuapp.com/rest/employees/' + businessId)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        for (let i = 0; i < responseJson.length; i++) {
+          employeeData.push(responseJson[i]);
+          this.setState({
+            data: employeeData
+          })
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  refreshEmployees = () => {
+    const employeeData = [];
+    let id = localStorage.getItem('id');
+    fetch('https://spring-clock.herokuapp.com/rest/employees/' + id)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        for (let i = 0; i < responseJson.length; i++) {
+          employeeData.push(responseJson[i]);
+          this.setState({
+            data: employeeData
           })
         }
         console.log('a');
@@ -271,10 +306,24 @@ class EnhancedTable extends React.Component {
         console.error(error);
       });
   };
-  //
-  // const linkToEmployeesFromBusiness = businessId => {
-  //   <Route path='/employees/:businessId' component={EmployeesByBusiness}/>
-  // };
+
+  clockInAndOut = id => {
+    fetch('https://spring-clock.herokuapp.com/rest/web/clock/in/out/' + id)
+      .then((responseJson) => {
+        return responseJson;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  clockInAndOutFakeLatency = businessId => {
+    this.state.selected.forEach((element) => {
+      console.log(element);
+      this.clockInAndOut(element);
+    });
+    setTimeout(() => { this.getEmployeesByBusinessId(businessId); }, 500);
+  };
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -288,14 +337,26 @@ class EnhancedTable extends React.Component {
 
   setSelected = id => this.setState({ selected: id });
 
+  changeClockState = () => {
+    if (!this.state.clock) {
+      this.setState({ clock: true });
+      console.log(this.state.clock);
+    } else {
+      this.setState({ clock: false });
+      console.log(this.state.clock);
+    }
+  };
+
   componentDidMount() {
-    this.getBusinesses();
+    this.getEmployees();
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, businessId } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-
+    const getEmployees = () => {
+      this.clockInAndOutFakeLatency(businessId);
+    };
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length} />
@@ -326,13 +387,25 @@ class EnhancedTable extends React.Component {
                     <TableCell padding="checkbox">
                       <Checkbox checked={isSelected} />
                     </TableCell>
-                    <TableCell padding="none">{n.bizName}</TableCell>
                     <TableCell padding="none">{n.id}</TableCell>
+                    <TableCell numeric>{n.user}</TableCell>
+                    <TableCell numeric>{n.payRate}</TableCell>
+                    <TableCell numeric>{n.totalPay}</TableCell>
+                    <TableCell numeric>{n.clocked.toString()}</TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
             <TableFooter>
+              <div>
+                <Button
+                  className={classes.button} raised color="primary"
+                  onClick={getEmployees}
+                >
+                  Clock In/Out
+                  <Timer className={this.props.classes.rightIcon} />
+                </Button>
+              </div>
               <TableRow>
                 <TablePagination
                   count={data.length}

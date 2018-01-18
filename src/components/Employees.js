@@ -193,7 +193,7 @@ class EnhancedTable extends React.Component {
 
     this.state = {
       order: 'asc',
-      orderBy: 'calories',
+      orderBy: '',
       selected: [],
       data: [],
       page: 0,
@@ -209,7 +209,6 @@ class EnhancedTable extends React.Component {
     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc';
     }
-
     const data =
       order === 'desc'
         ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
@@ -254,7 +253,7 @@ class EnhancedTable extends React.Component {
   };
 
   getEmployees = () => {
-    var employeeData = [];
+    const employeeData = [];
     let id = localStorage.getItem('id');
     fetch('https://spring-clock.herokuapp.com/rest/get/all/employees/' + id)
       .then((response) => response.json())
@@ -289,7 +288,7 @@ class EnhancedTable extends React.Component {
   };
 
   refreshEmployees = () => {
-    var employeeData = [];
+    const employeeData = [];
     let id = localStorage.getItem('id');
     fetch('https://spring-clock.herokuapp.com/rest/employees/' + id)
       .then((response) => response.json())
@@ -309,7 +308,7 @@ class EnhancedTable extends React.Component {
   };
 
   clockInAndOut = id => {
-    fetch('https://spring-clock.herokuapp.com/rest/web/clock/in/' + id)
+    fetch('https://spring-clock.herokuapp.com/rest/web/clock/in/out/' + id)
       .then((responseJson) => {
         return responseJson;
       })
@@ -353,7 +352,7 @@ class EnhancedTable extends React.Component {
   }
 
   render() {
-    const { classes, businessId } = this.props;
+    const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const getEmployees = () => {
       this.clockInAndOutFakeLatency();
